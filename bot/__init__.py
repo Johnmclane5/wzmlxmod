@@ -184,6 +184,10 @@ STREAMWISH_API = environ.get('STREAMWISH_API', '')
 if len(STREAMWISH_API) == 0:
     STREAMWISH_API = ''
 
+TMDB_API_KEY = environ.get('TMDB_API_KEY', '')
+if len(TMDB_API_KEY) == 0:
+    TMDB_API_KEY = ''
+
 BOT_MAX_TASKS = environ.get('BOT_MAX_TASKS', '')
 BOT_MAX_TASKS = int(BOT_MAX_TASKS) if BOT_MAX_TASKS.isdigit() else ''
 
@@ -346,6 +350,7 @@ config_dict = {'AS_DOCUMENT': AS_DOCUMENT,
                'SHOW_MEDIAINFO': SHOW_MEDIAINFO,
                'STOP_DUPLICATE': STOP_DUPLICATE,
                'STREAMWISH_API': STREAMWISH_API,
+               'TMDB_API_KEY': TMDB_API_KEY,
                'TELEGRAM_API': TELEGRAM_API,
                'TELEGRAM_HASH': TELEGRAM_HASH,
                'TORRENT_TIMEOUT': TORRENT_TIMEOUT,
