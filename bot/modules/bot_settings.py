@@ -120,6 +120,10 @@ async def load_config():
     if len(FILELION_API) == 0:
         FILELION_API = ''
 
+    TMDB_API_KEY = environ.get('TMDB_API_KEY', '')
+    if len(TMDB_API_KEY) == 0:
+        TMDB_API_KEY = ''
+
     LEECH_LOG_ID = environ.get('LEECH_LOG_ID', '')
     LEECH_LOG_ID = '' if len(LEECH_LOG_ID) == 0 else int(LEECH_LOG_ID)
 
@@ -350,6 +354,7 @@ async def load_config():
                         'SHOW_MEDIAINFO': SHOW_MEDIAINFO,
                         'STOP_DUPLICATE': STOP_DUPLICATE,
                         'STREAMWISH_API': STREAMWISH_API,
+                        'TMDB_API_KEY': TMDB_API_KEY,
                         'TELEGRAM_API': TELEGRAM_API,
                         'TELEGRAM_HASH': TELEGRAM_HASH,
                         'TORRENT_TIMEOUT': TORRENT_TIMEOUT,
