@@ -17,9 +17,6 @@ async def add_direct_download(details, path, listener, foldername):
     size = details['total_size']
     if not foldername:
         foldername = details['title']
-    if isNSFWdata(details):
-        await listener.onDownloadError('NSFW detected')
-        return
     path = f'{path}/{foldername}'
     msg, button = await stop_duplicate_check(foldername, listener)
     if msg:
