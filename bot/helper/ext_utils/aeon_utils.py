@@ -2,8 +2,6 @@ from pyshorteners import Shortener
 from bot import LOGGER
 from re import IGNORECASE, search, escape
 
-from bot.helper.ext_utils.text_utils import nsfw_keywords
-
 def tinyfy(long_url):
     s = Shortener()
     try:
