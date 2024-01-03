@@ -31,7 +31,7 @@ from bot.helper.mirror_utils.rclone_utils.transfer import RcloneTransferHelper
 from bot.helper.telegram_helper.message_utils import sendCustomMsg, sendMessage, editMessage, delete_all_messages, delete_links, sendMultiMessage, update_all_messages, deleteMessage, five_minute_del
 from bot.helper.telegram_helper.button_build import ButtonMaker
 from bot.helper.ext_utils.db_handler import DbManager
-from bot.helper.ext_utils.shortners import short_url
+from bot.helper.ext_utils.shorteners import short_url
 from bot.helper.ext_utils.aeon_utils import tinyfy
 
 
