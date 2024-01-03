@@ -342,8 +342,8 @@ class MirrorLeechListener:
         user_id = self.message.from_user.id
         name, _ = await format_filename(name, user_id, isMirror=not self.isLeech)
         user_dict = user_data.get(user_id, {})
-        msg = f'{escape(name)}\n\n'
-        msg += f'<b>• Size: </b>{get_readable_file_size(size)}\n'
+        nmsg = f'{escape(name)}\n\n'
+        msg = f'<b>• Size: </b>{get_readable_file_size(size)}\n'
         msg += f'<b>• Elapsed: </b>{get_readable_time(time() - self.message.date.timestamp())}\n'
         LOGGER.info(f'Task Done: {name}')
         buttons = ButtonMaker()
@@ -378,9 +378,9 @@ class MirrorLeechListener:
                         fmsg = '\n\n'
                 if fmsg != '\n\n':
                     if self.linkslogmsg:
-                        await sendMessage(self.linkslogmsg, msg + lmsg + fmsg)
+                        await sendMessage(self.linkslogmsg,  nmsg + msg + lmsg + fmsg)
                         await deleteMessage(self.linkslogmsg)
-                await sendMessage(self.botpmmsg, msg + lmsg + fmsg)
+                await sendMessage(self.botpmmsg, nmsg + msg + lmsg + fmsg)
                 await deleteMessage(self.botpmmsg)
                 if self.isSuperGroup:
                     await sendMessage(self.message, f'{msg}<b>Files has been sent to your inbox</b>', iButton.build_menu(1), self.random_pic)
@@ -418,10 +418,10 @@ class MirrorLeechListener:
             msg += f'<b>• User ID: </b><code>{self.message.from_user.id}</code>\n\n'
 
             if config_dict['MIRROR_LOG_ID']:
-                log_msg = list((await sendMultiMessage(config_dict['MIRROR_LOG_ID'], msg, button)).values())[0]
+                log_msg = list((await sendMultiMessage(config_dict['MIRROR_LOG_ID'], nmsg + msg, button)).values())[0]
                 if self.linkslogmsg:
                     await deleteMessage(self.linkslogmsg)
-            await sendMessage(self.botpmmsg, msg, button, self.random_pic)
+            await sendMessage(self.botpmmsg, nmsg + msg, button, self.random_pic)
             await deleteMessage(self.botpmmsg)
             if self.isSuperGroup:
                 await sendMessage(self.message, f'{msg} <b>Links has been sent to your inbox</b>', iButton.build_menu(1), self.random_pic)
