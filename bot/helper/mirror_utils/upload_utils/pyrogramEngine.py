@@ -393,7 +393,7 @@ class TgUploader:
                 key = 'videos'
                 duration = (await get_media_info(self.__up_path))[0]
                 if thumb is None:
-                    thumb = await take_ss(self.__up_path, duration)
+                    thumb = await self.get_custom_thumb(tmdb_poster_url)
                 if thumb is not None:
                     with Image.open(thumb) as img:
                         width, height = img.size
