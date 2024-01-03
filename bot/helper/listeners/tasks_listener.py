@@ -16,6 +16,7 @@ from bot.helper.ext_utils.bot_utils import extra_btns, sync_to_async, get_readab
 from bot.helper.ext_utils.fs_utils import get_base_name, get_path_size, clean_download, clean_target, is_first_archive_split, is_archive, is_archive_split, join_files
 from bot.helper.ext_utils.leech_utils import split_file, format_filename
 from bot.helper.ext_utils.exceptions import NotSupportedExtractionArchive
+from bot.helper.ext_utils.aeon_utils import extract_movie_info, get_movie_poster
 from bot.helper.ext_utils.task_manager import start_from_queued
 from bot.helper.mirror_utils.status_utils.extract_status import ExtractStatus
 from bot.helper.mirror_utils.status_utils.zip_status import ZipStatus
@@ -30,6 +31,9 @@ from bot.helper.mirror_utils.rclone_utils.transfer import RcloneTransferHelper
 from bot.helper.telegram_helper.message_utils import sendCustomMsg, sendMessage, editMessage, delete_all_messages, delete_links, sendMultiMessage, update_all_messages, deleteMessage, five_minute_del
 from bot.helper.telegram_helper.button_build import ButtonMaker
 from bot.helper.ext_utils.db_handler import DbManager
+from bot.helper.ext_utils.shortners import short_url
+from bot.helper.ext_utils.aeon_utils import tinyfy
+
 
 
 class MirrorLeechListener:
@@ -346,6 +350,8 @@ class MirrorLeechListener:
         msg = f'<b>• Size: </b>{get_readable_file_size(size)}\n'
         msg += f'<b>• Elapsed: </b>{get_readable_time(time() - self.message.date.timestamp())}\n'
         LOGGER.info(f'Task Done: {name}')
+        movie_name, release_year = await extract_movie_info(name)
+        tmdb_poster_url = await get_movie_poster(movie_name, release_year)
         buttons = ButtonMaker()
         iButton = ButtonMaker()
         iButton.ibutton('View in inbox', f"aeon {user_id} botpm", 'header')
@@ -398,7 +404,8 @@ class MirrorLeechListener:
             if mime_type == "Folder":
                 msg += f'<b>• Total files: </b>{files}\n'
             if link:
-                buttons.ubutton('Cloud link', link)
+                shorty = tinyfy(short_url(link))
+                buttons.ubutton('Cloud link', shorty)
                 INDEX_URL = self.index_link if self.drive_id else config_dict['INDEX_URL']
                 if not rclonePath:
                     if INDEX_URL:
@@ -409,6 +416,7 @@ class MirrorLeechListener:
                         buttons.ubutton('Index link', share_url)
                 buttons = extra_btns(buttons)
                 button = buttons.build_menu(2)
+                photo = tmdb_poster_url
             elif rclonePath:
                 msg += f'<b>• Path: </b><code>{rclonePath}</code>\n'
                 button = None
@@ -418,7 +426,7 @@ class MirrorLeechListener:
             msg += f'<b>• User ID: </b><code>{self.message.from_user.id}</code>\n\n'
 
             if config_dict['MIRROR_LOG_ID']:
-                log_msg = list((await sendMultiMessage(config_dict['MIRROR_LOG_ID'], nmsg + msg, button)).values())[0]
+                log_msg = list((await sendMultiMessage(config_dict['MIRROR_LOG_ID'], nmsg + msg, button, photo)).values())[0]
                 if self.linkslogmsg:
                     await deleteMessage(self.linkslogmsg)
             await sendMessage(self.botpmmsg, nmsg + msg, button, self.random_pic)
