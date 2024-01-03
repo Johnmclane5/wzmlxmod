@@ -1,5 +1,7 @@
+import re
+import aiohttp
 from pyshorteners import Shortener
-from bot import LOGGER
+from bot import LOGGER, config_dict
 from re import IGNORECASE, search, escape
 
 async def extract_movie_info(caption):
